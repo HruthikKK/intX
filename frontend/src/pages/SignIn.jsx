@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
+import { signInSuccess } from "../app/features/userSlice"; 
 
 function SignIn() {
   const navigate = useNavigate();
@@ -8,6 +10,7 @@ function SignIn() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +50,7 @@ function SignIn() {
       setFormData({ email: "", password: "" });
       setSuccess("SignIn Sucessfull")
       setLoading(false);
+      dispatch(signInSuccess(result));
 
       // Redirect or do something with user data
       setTimeout(() => {
