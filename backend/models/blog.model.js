@@ -6,7 +6,7 @@ const blogPostSchema = new mongoose.Schema({
             required: true,
             trim: true,
         },
-        content: {
+        description: {
             type: String,
             required: true,
         },
@@ -20,9 +20,23 @@ const blogPostSchema = new mongoose.Schema({
             required: true,
             trim: true,
         },
-        isPublished: {
-            type: Boolean,
-            default: false,
+        vote: [
+            {
+              user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User', // Reference to the User model
+                required: true, // Ensure a user is always associated with a vote
+              },
+              type: {
+                type: String,
+                enum: ['up', 'down'], // Restrict to these two types
+                required: true, // Make the vote type mandatory
+              },
+            },
+        ],
+        upvotes : {
+            type : Number,
+            default : 0
         }
     },
     {

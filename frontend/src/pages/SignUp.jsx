@@ -31,7 +31,8 @@ function SignUp() {
     setLoading(true)
     e.preventDefault();
 
-    const { username, email, password } = formData;
+    const { username, email, password,role="user"} = formData;
+    console.log(role);
 
     // Validate input (simple validation)
     if (!username || !email || !password) {
@@ -40,12 +41,12 @@ function SignUp() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/signup", {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ username, email, password, role }),
       });
 
       
@@ -144,16 +145,6 @@ function SignUp() {
                 {loading ? "Signing Up..." : "Sign Up"}
               </button>
 
-              {/* Google Auth */}
-              <div className="flex items-center justify-center space-x-2">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-center p-3 border border-gray-300 rounded-lg hover:bg-gray-200 transition duration-200 text-sm md:text-base"
-                >
-                  <FaGoogle className="h-5 w-5 mr-2 text-gray-500" />
-                  Sign Up with Google
-                </button>
-              </div>
             </form>
 
             {/* Already Have an Account */}

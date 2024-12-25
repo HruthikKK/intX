@@ -14,9 +14,13 @@ app.use(express.static("public"))
 //Routes
 import testRoute from "./routes/test.route.js"
 import authRoute from "./routes/auth.route.js"
+import userRoute from "./routes/user.route.js"
+import blogRouter from "./routes/blog.route.js"
 
 app.use("/api/test", testRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
+app.use("/api/blog", blogRouter);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

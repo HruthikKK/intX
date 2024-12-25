@@ -1,7 +1,31 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { signoutSuccess } from '../app/features/userSlice';
 
 function Header() {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('/api/user/signout', {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+      }
+      navigate('/')
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Toggle menu for small screens
@@ -10,7 +34,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-gray-800 text-white">
+    <header className="bg-gray-800 text-white sticky top-0 z-1 ">
       {/* Top: Logo and Sign In / Sign Up */}
       <div className="flex justify-between items-center p-4">
 
@@ -48,24 +72,44 @@ function Header() {
 
         {/* Right: SignIn and SignUp Buttons */}
         <div className="flex space-x-4">
-          <Link
-            to="/signin"
-            className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-700 text-sm sm:text-base"
-          >
-            Sign In
-          </Link>
-          <Link
-            to="/signup"
-            className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-700 text-sm sm:text-base"
-          >
-            Sign Up
-          </Link>
+          {currentUser ? (
+            <>
+               <button
+                  onClick={handleSignout}
+                  className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-700 text-sm sm:text-base"
+                >
+                  Sign Out
+              </button>
+              <Link
+                to="/profile"
+                className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-700 text-sm sm:text-base"
+              >
+                Profile
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/signin"
+                className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-700 text-sm sm:text-base"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-700 text-sm sm:text-base"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
+
       </div>
 
       {/* Dropdown Menu */}
       {isMenuOpen && (
-          <div className="flex flex-col items-center  p-2 space-y-4  bg-gray-700">
+          <div className="sm:hidden flex flex-col items-center  p-2 space-y-4  bg-gray-700">
             <Link to="/" className="text-lg sm:text-xl hover:text-gray-400" onClick={() => setIsMenuOpen(false)}>
               Home
             </Link>

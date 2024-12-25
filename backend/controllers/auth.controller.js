@@ -4,7 +4,7 @@ import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 
 const signup = async (req, res, next) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
   
     if (
       !username ||
@@ -23,6 +23,7 @@ const signup = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
+      role
     });
   
     try {
@@ -57,7 +58,7 @@ const signin = async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
 
     // Send user details to the frontend
-    res.status(200).json({ user: { _id: user._id, username: user.username, email: user.email } });
+    res.status(200).json({ user: { _id: user._id, username: user.username, email: user.email, role: user.role } });
   } catch (error) {
     console.error("Error during sign-in:", error);
     res.status(500).json({ message: error.message });
