@@ -1,5 +1,6 @@
 import { BlogPost } from "../models/blog.model.js"; // Adjust the path to match your project structure
 import { User } from "../models/user.model.js"
+import { Comment } from "../models/comment.model.js"
 // Create a new blog post
 export const createBlogPost = async (req, res) => {
     try {        
@@ -110,12 +111,30 @@ export const getBlogPost = async (req, res) => {
             ? { username: author.username, email: author.email } 
             : { username: 'Deleted User', email: 'N/A' };
 
+        const comments = await Comment.find({ blogPost: blog._id, parentComment : null })
+        .sort({ createdAt: -1 });  // Optionally, sort comments by creation date in descending order
+        
+        console.log(comments);
+        
+        // Now, for each comment, we need to fetch the author's name
+        const commentsWithAuthorName = await Promise.all(comments.map(async (comment) => {
+            // Fetch the author details for each comment
+            const author = await User.findById(comment.author).select('username'); // Select the username (or name)
+            return {
+                ...comment.toObject(),
+                authorName: author ? author.username : 'Deleted account' // Add the author name
+            };
+        }));
+
+        console.log(commentsWithAuthorName);
+        
         // Construct the response
         const response = {
             _id: blog._id,
             title: blog.title,
             description: blog.description,
             author: authorDetails,
+            comments: commentsWithAuthorName,
             upvotes: blog.upvotes,
             downvotes: blog.vote.length - blog.upvotes,
         };
@@ -175,3 +194,25 @@ export const voteBlog = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+export const getAllBlogs = async (req, res) => {
+    try {
+      // Fetch blogs with only the specified fields: id, title, description, upvotes, and author
+      const blogs = await BlogPost.find({}, 'title description upvotes author').sort({ createdAt: -1 });
+  // Include only these fields
+  
+      // Fetch the author's username for each blog asynchronously using Promise.all
+      const blogsWithAuthorName = await Promise.all(blogs.map(async (blog) => {
+        const author = await User.findById(blog.author).select('username');  // Fetch the author's username from the User model
+        return {
+          ...blog.toObject(),  // Convert blog document to a plain object
+          authorName: author ? author.username : 'Deleted account'  // Add the author's username, or 'Deleted account' if not found
+        };
+      }));
+  
+      res.json(blogsWithAuthorName);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+  

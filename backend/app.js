@@ -16,11 +16,15 @@ import testRoute from "./routes/test.route.js"
 import authRoute from "./routes/auth.route.js"
 import userRoute from "./routes/user.route.js"
 import blogRouter from "./routes/blog.route.js"
+import commentRouter from "./routes/comment.route.js"
+import homeRouter from "./routes/home.route.js"
 
 app.use("/api/test", testRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/blog", blogRouter);
+app.use("/api/comment", commentRouter);
+app.use("/api/home", homeRouter);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

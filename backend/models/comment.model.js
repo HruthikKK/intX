@@ -21,7 +21,11 @@ const commentSchema = new mongoose.Schema({
         ref: "Comment", // Reference to another Comment
         default: null,  // Null if it's a direct comment to the blog
     },
-});
+    },
+    {
+        timestamps: true
+    }
+);
 
 export const Comment = mongoose.model("Comment", commentSchema);
 

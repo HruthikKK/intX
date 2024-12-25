@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { FiMessageCircle } from 'react-icons/fi';
 
 function Blog() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function Blog() {
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [commentError, setCommentError] = useState(null);
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
   const [comments, setComments] = useState([]);
@@ -72,46 +74,93 @@ function Blog() {
   const handleAddComment = async () => {
     if (newComment.trim()) {
       try {
-        const response = await axios.post(`/api/blog/${id}/comment`, {
-          text: newComment.trim(),
-          parentId: parentCommentId,
+        const response = await axios.post(`/api/comment/create`, {
+          blogPostId : id,
+          content: newComment.trim(),
+          parentCommentId: parentCommentId,
+          userId : author
         });
-        setComments(response.data.updatedComments);
+
+        console.log(response);
+        
+        // Update the comments list with the new comment
+        setComments((prevComments) => [...prevComments, response.data.comment]);
+
+        // Clear the input field and reset state
         setNewComment('');
         setParentCommentId(null);
+        setCommentError(null);  // Clear any previous error message
       } catch (err) {
-        alert('Failed to add comment. Please try again.');
+        setCommentError(err.message);
       }
+    } else {
+      setCommentError('Comment cannot be empty!');
     }
   };
 
-  const handleReply = (commentId) => {
-    setParentCommentId(commentId);
-    setNewComment('');
+
+  const [replyOpen, setReplyOpen] = useState(null);
+  const [replyContent, setReplyContent] = useState('');
+  const [childReplyContent, setchildReplyContent] = useState([]);
+
+
+  const handleReplyClick = async (commentId) => {
+    if (replyOpen === commentId) {
+      // Close the reply section
+      setReplyOpen(null);
+      setchildReplyContent([]);
+    } else {
+      setReplyOpen(commentId);
+  
+      try {
+        // Fetch the child comments for the specified commentId
+        const response = await axios.get(`/api/comment/children`, {
+          params: {
+            parentCommentId: commentId, // Send the parent comment ID as a query parameter
+          },
+        });
+  
+        // Update the childReplyContent state with the fetched comments
+        setchildReplyContent(response.data);
+      } catch (error) {
+        console.error('Error fetching child comments:', error);
+        alert('Failed to load child comments. Please try again later.');
+      }
+    }
+  };  
+
+
+  const handleReplySubmit = async (commentId) => {
+    try {
+      // Check if replyContent is empty
+      if (!replyContent.trim()) {
+        alert("Reply content cannot be empty!");
+        return;
+      }
+  
+      // Make a POST request to your backend API using axios
+      const response = await axios.post(`/api/comment/create`, {
+        blogPostId: blog._id, // Assuming `blog._id` is the current blog post ID
+        content: replyContent.trim(),
+        parentCommentId: commentId, // Parent comment ID for threading
+        userId: author, // Assuming `author` is the current user ID
+      });
+  
+      console.log(`Reply submitted successfully:`, response.data);
+  
+      // Reset the state after successful submission
+      // setReplyOpen(null); // Close the reply textbox
+      setReplyContent('');
+      setchildReplyContent((prevComments) => [...prevComments, response.data.comment]);
+    } catch (error) {
+      console.error('Error submitting reply:', error);
+      alert('Failed to submit reply. Please try again later.');
+    }
   };
+    
 
   const handleBack = () => {
     navigate('/');
-  };
-
-  const renderComments = (comments, parentId = null) => {
-    return comments
-      .filter((comment) => comment.parentId === parentId)
-      .map((comment) => (
-        <div key={comment.id} className="ml-4 mt-2">
-          <div className="bg-white p-2 rounded shadow text-gray-700">
-            <p className="font-bold">{comment.author}</p>
-            <p>{comment.text}</p>
-            <button
-              onClick={() => handleReply(comment.id)}
-              className="text-sm text-blue-500 hover:underline"
-            >
-              Reply
-            </button>
-          </div>
-          <div className="pl-4">{renderComments(comments, comment.id)}</div>
-        </div>
-      ));
   };
 
   return (
@@ -173,7 +222,8 @@ function Blog() {
               {/* Comments Section */}
               <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                 <h2 className="text-lg font-bold text-gray-700">Comments</h2>
-                {renderComments(comments)}
+                
+                {/* Input for Adding New Comment */}
                 <div className="mt-4 flex gap-2">
                   <input
                     type="text"
@@ -189,7 +239,82 @@ function Blog() {
                     Post
                   </button>
                 </div>
+                <div>
+                  <p className="text-red-500">{commentError}</p>
+                </div>
+                
+                {/* Display Existing Comments */}
+                <div className="mt-6 space-y-4">
+                  {comments && comments.length > 0 ? (
+                    comments.map((comment) => (
+                      <div key={comment._id} className="bg-white p-4 rounded-lg shadow-sm">
+                        <div className="flex justify-between">
+                          <h3 className="text-md font-semibold text-gray-800">{comment.authorName}</h3>
+                          <p className="text-sm text-gray-500">{new Date(comment.createdAt).toLocaleString()}</p>
+                        </div>
+                        <p className="mt-2 text-gray-700">{comment.content}</p>
+                        
+                        {/* Reply Button */}
+                        <div className="flex items-center justify-end space-x-4">
+                          <button
+                            onClick={() => handleReplyClick(comment._id)}
+                            className="px-2 py-2 text-sm font-medium text-blue-600 rounded-md hover:bg-blue-300"
+                          >
+                            <FiMessageCircle className="text-blue-700" size={20} />
+                          </button>
+                        </div>
+
+
+
+                        {replyOpen === comment._id && (
+                          <div>
+                            <div className="mt-4">
+                              <textarea
+                                value={replyContent}
+                                onChange={(e) => setReplyContent(e.target.value)}
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                placeholder="Type your reply..."
+                              />
+                              <button
+                                onClick={() => handleReplySubmit(comment._id)}
+                                className="m-2 bg-blue-600 text-white px-4 py-1 rounded-lg"
+                              >
+                                Send
+                              </button>
+                            </div>
+
+                            <div className="mt-4 space-y-2">
+                              {childReplyContent.length > 0 ? (
+                                childReplyContent.map((child) => (
+                                  <div
+                                    key={child._id}
+                                    className="p-2 border border-gray-200 rounded-md bg-gray-100"
+                                  >
+                                    <p className="text-sm text-gray-700">
+                                      <strong>{child.authorName}</strong>: {child.content}
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                      {new Date(child.createdAt).toLocaleString()}
+                                    </p>
+                                  </div>
+                                ))
+                              ) : (
+                                <p className="text-sm text-gray-500">No replies yet.</p>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                      </div>
+
+
+                    ))
+                  ) : (
+                    <p className="text-gray-500">No comments yet.</p>
+                  )}
+                </div>
               </div>
+
             </div>
           </div>
         </>
