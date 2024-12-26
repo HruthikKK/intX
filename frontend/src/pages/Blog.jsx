@@ -164,8 +164,8 @@ function Blog() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-7xl bg-white shadow-lg rounded-lg p-6 flex gap-6">
+    <div className="min-h-screen flex items-center justify-between bg-gray-50 p-4">
+      <div className="w-full min-w-max-w-7xl bg-white shadow-lg rounded-lg p-6 flex gap-6">
         {loading && <p className="text-blue-500 text-center">Loading...</p>}
         {error && (
           <div className="text-center">
@@ -180,7 +180,7 @@ function Blog() {
         )}
         {!loading && !error && blog && (
           <>
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full flex flex-col lg:flex-row gap-6 lg:justify-between">
             {/* Main Content */}
             <div className="lg:flex-[7] w-full">
               <h1 className="text-3xl font-bold text-gray-800">{blog.title}</h1>

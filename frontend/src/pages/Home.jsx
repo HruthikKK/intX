@@ -9,6 +9,7 @@ const [visibleBlogs, setVisibleBlogs] = useState([]);
 const [topContributors, setTopContributors] = useState([]);
 const [topBlogs, setTopBlogs] = useState([]);
 const [companyTags, setCompanyTags] = useState([]);
+const [searchTerm, setSearchTerm] = useState('');
 const navigate = useNavigate();  // Initialize the navigate function
 
 
@@ -19,11 +20,11 @@ useEffect(() => {
       // Fetch data for blogs, contributors, top blogs, and company tags using axios
       const blogResponse = await axios.get('/api/blog/all');
       const blogsData = blogResponse.data;
-      console.log(blogsData);
+      // console.log(blogsData);
 
       const contributorsResponse = await axios.get('/api/home/topContributors ');
       const contributorsData = contributorsResponse.data;
-      console.log(contributorsData);
+      // console.log(contributorsData);
       
       // const tagsResponse = await axios.get('/api/companies');
       // const tagsData = tagsResponse.data;
@@ -38,7 +39,7 @@ useEffect(() => {
         // Select the top 5 blogs
         setTopBlogs(sortedBlogs.slice(0, 5));
       }
-      console.log("HI",topBlogs);
+      // console.log("HI",topBlogs);
       
       // Assuming the first 5 blogs are the top ones
       // setCompanyTags(tagsData);
@@ -52,7 +53,14 @@ useEffect(() => {
   fetchData();
 }, []);
 
-console.log("djbkadj",topBlogs);
+// console.log("djbkadj",topBlogs);
+// Handle search button click
+const handleSearch = () => {
+  const filteredBlogs = blogs.filter((blog) =>
+    blog.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  setVisibleBlogs(filteredBlogs); // Update visible blogs with search results
+};
 
 // Load more blogs when the button is clicked
 const loadMoreBlogs = () => {
@@ -65,17 +73,30 @@ const loadMoreBlogs = () => {
     // Redirect to the individual blog page using the blog ID
     navigate(`/blog/${id}`);
   };
+
+
   return (
     <div className="bg-gray-700 min-h-screen p-4">
       <div className="sm:flex sm:space-x-8">
         {/* Left Section */}
         <div className="sm:w-2/3 space-y-4">
           {/* Search Bar */}
-          <input
-            type="text"
-            placeholder="Search blogs..."
-            className="w-2/3 p-2 text-black rounded-lg m-5"
-          />
+          {/* Search Bar */}
+          <div>
+            <input
+              type="text"
+              placeholder="Search blogs..."
+              className="w-2/3 p-2 text-black rounded-lg m-5"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button
+              onClick={handleSearch}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            >
+              Search
+            </button>
+          </div>
           
           {/* Blog List */}
           <div className="space-y-8">
