@@ -19,7 +19,6 @@ useEffect(() => {
     try {
       // Fetch data for blogs, contributors, top blogs, and company tags using axios
       const blogResponse = await axios.get('https://intx.onrender.com/api/blog/all');
-      log(blogResponse)
       const blogsData = blogResponse.data;
       // console.log(blogsData);
 
