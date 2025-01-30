@@ -19,6 +19,7 @@ useEffect(() => {
     try {
       // Fetch data for blogs, contributors, top blogs, and company tags using axios
       const blogResponse = await axios.get('/api/blog/all');
+      log(blogResponse)
       const blogsData = blogResponse.data;
       // console.log(blogsData);
 

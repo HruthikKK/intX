@@ -55,7 +55,7 @@ const signin = async (req, res) => {
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET,);
 
     // Set JWT as cookie
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, { httpOnly: false });
 
     // Send user details to the frontend
     res.status(200).json({ user: { _id: user._id, username: user.username, email: user.email, role: user.role } });
