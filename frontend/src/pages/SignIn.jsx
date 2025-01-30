@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { signInSuccess } from "../app/features/userSlice"; 
+import apiClient from "./Api.jsx";
+import { apiFetch } from "./apiClient";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ function SignIn() {
     }
 
     try {
-      const response = await fetch("/api/auth/signin", {
+      const response = await apiFetch("/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

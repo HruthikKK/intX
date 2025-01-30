@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
+import apiClient from "./Api.jsx";
+import { apiFetch } from "./apiClient";
 
 function SignUp() {
   // Step 1: State for form data
@@ -41,7 +43,7 @@ function SignUp() {
     }
 
     try {
-      const response = await fetch("/api/auth/signup", {
+      const response = await apiFetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

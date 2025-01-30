@@ -6,7 +6,9 @@ import { setOpenedBlogId, clearOpenedBlogId } from '../app/features/blogSlice';
 
 import axios from "axios";
 import BlogModal from '../components/blogModal';
- 
+import apiClient from "./Api.jsx";
+import { apiFetch } from "./apiClient";
+
 function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -33,7 +35,7 @@ function Profile() {
     if (!confirmation) return;
 
     try {
-      const response = await fetch(`/api/user/${userId}`, {
+      const response = await apiFetch(`/api/user/${userId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +102,7 @@ function Profile() {
     }
 
     try {
-      const response = await fetch("/api/user/update", {
+      const response = await apiFetch("/api/user/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -133,7 +135,7 @@ function Profile() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get(`/api/blog?author=${currentUserId}`);
+        const response = await apiClient.get(`/api/blog?author=${currentUserId}`);
         setBlogs(response.data.blogs);
       } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -192,7 +194,7 @@ function Profile() {
       setBlogs((prevBlogs) => prevBlogs.filter(blog => blog._id !== blogId));
   
       // Optionally, make an API call to delete the blog from the server:
-      fetch(`/api/blog/delete/${blogId}`, {
+      apiFetch(`/api/blog/delete/${blogId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

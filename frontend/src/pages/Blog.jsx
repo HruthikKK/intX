@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { FiMessageCircle } from 'react-icons/fi';
+import apiClient from "./Api.jsx";
+import { apiFetch } from "./apiClient";
 
 function Blog() {
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ function Blog() {
     const fetchBlog = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/blog/${id}`);
+        const response = await apiClient.get(`/api/blog/${id}`);
         if (response.data) {
           console.log(response.data);
           
@@ -56,7 +58,7 @@ function Blog() {
       alert("Please log in to vote!");
     } else {
       try {
-        const response = await axios.post(`/api/blog/vote/${id}`, { type, author });
+        const response = await apiClient.post(`/api/blog/vote/${id}`, { type, author });
         setUpvotes(response.data.upvotes);
         setDownvotes(response.data.downvotes);
       } catch (err) {
@@ -74,7 +76,7 @@ function Blog() {
   const handleAddComment = async () => {
     if (newComment.trim()) {
       try {
-        const response = await axios.post(`/api/comment/create`, {
+        const response = await apiClient.post(`/api/comment/create`, {
           blogPostId : id,
           content: newComment.trim(),
           parentCommentId: parentCommentId,
@@ -114,7 +116,7 @@ function Blog() {
   
       try {
         // Fetch the child comments for the specified commentId
-        const response = await axios.get(`/api/comment/children`, {
+        const response = await apiClient.get(`/api/comment/children`, {
           params: {
             parentCommentId: commentId, // Send the parent comment ID as a query parameter
           },
@@ -139,7 +141,7 @@ function Blog() {
       }
   
       // Make a POST request to your backend API using axios
-      const response = await axios.post(`/api/comment/create`, {
+      const response = await apiClient.post(`/api/comment/create`, {
         blogPostId: blog._id, // Assuming `blog._id` is the current blog post ID
         content: replyContent.trim(),
         parentCommentId: commentId, // Parent comment ID for threading
