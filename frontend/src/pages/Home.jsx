@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import apiClient from "./Api.jsx";
+import { apiClient, apiFetch } from "./Api.jsx";
 
 function Home() {
   // Sample data for blogs and contributors

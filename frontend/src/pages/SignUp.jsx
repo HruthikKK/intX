@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
-import apiClient from "./Api.jsx";
-import { apiFetch } from "./apiClient";
+import { apiClient } from "./Api.jsx";
+import { apiFetch } from "./Api.jsx";
 
 function SignUp() {
   // Step 1: State for form data

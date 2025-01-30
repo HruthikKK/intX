@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { FiMessageCircle } from 'react-icons/fi';
-import apiClient from "./Api.jsx";
-import { apiFetch } from "./apiClient";
+import { apiClient } from "./Api.jsx";
+import { apiFetch } from "./Api.jsx";
 
 function Blog() {
   const navigate = useNavigate();

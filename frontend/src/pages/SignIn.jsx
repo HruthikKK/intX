@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { signInSuccess } from "../app/features/userSlice"; 
-import apiClient from "./Api.jsx";
-import { apiFetch } from "./apiClient";
+import { apiClient } from "./Api.jsx";
+import { apiFetch } from "./Api.jsx";
 
 function SignIn() {
   const navigate = useNavigate();

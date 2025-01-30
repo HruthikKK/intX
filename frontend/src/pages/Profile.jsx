@@ -6,8 +6,8 @@ import { setOpenedBlogId, clearOpenedBlogId } from '../app/features/blogSlice';
 
 import axios from "axios";
 import BlogModal from '../components/blogModal';
-import apiClient from "./Api.jsx";
-import { apiFetch } from "./apiClient";
+import { apiClient } from "./Api.jsx";
+import { apiFetch } from "./Api.jsx";
 
 function Profile() {
   const { currentUser } = useSelector((state) => state.user);

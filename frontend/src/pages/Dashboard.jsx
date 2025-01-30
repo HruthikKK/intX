@@ -1,5 +1,5 @@
 import React from 'react'
-import apiClient from "./Api.jsx";
+import { apiClient } from "./Api.jsx";
 
 function Dashboard() {
   return (
