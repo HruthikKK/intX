@@ -16,7 +16,8 @@ function Profile() {
   const [editFormError, setEditFormError] = useState(""); // Renamed to editFormError
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [iscreate, setIscreate] = useState(false)
-
+  const API_URL = import.meta.env.VITE_API_URL || "https://intx.onrender.com";
+  
   const handleDashboardNavigation = () => {
     navigate('/dashboard');
   };

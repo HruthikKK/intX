@@ -8,6 +8,7 @@ function SignUp() {
   // Step 1: State for form data
 
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL || "https://intx.onrender.com";
 
   const [formData, setFormData] = useState({
     username: "",
@@ -43,7 +44,7 @@ function SignUp() {
     }
 
     try {
-      const response = await apiFetch("/api/auth/signup", {
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

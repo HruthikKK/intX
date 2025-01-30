@@ -12,7 +12,7 @@ const [topBlogs, setTopBlogs] = useState([]);
 const [companyTags, setCompanyTags] = useState([]);
 const [searchTerm, setSearchTerm] = useState('');
 const navigate = useNavigate();  // Initialize the navigate function
-
+const API_URL = import.meta.env.VITE_API_URL || "https://intx.onrender.com";
 
 // Load initial data from the backend
 useEffect(() => {

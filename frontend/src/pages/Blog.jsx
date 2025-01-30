@@ -11,7 +11,8 @@ function Blog() {
   const { id } = useParams();
   const { currentUser } = useSelector((state) => state.user);
   const author = currentUser?.user?._id;
-
+  const API_URL = import.meta.env.VITE_API_URL || "https://intx.onrender.com";
+  
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

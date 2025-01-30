@@ -10,17 +10,21 @@ export const apiClient = axios.create({
 });
 
 export const apiFetch = async (endpoint, options = {}) => {
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`API error: ${response.statusText}`);
-  }
-
-  return response.json();
-};
+    const url = `${API_URL}${endpoint}`;
+    console.log("Making request to:", url);  // Log the URL for debugging
+  
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  
+    if (!response.ok) {
+      throw new Error(`API error: ${response.statusText}`);
+    }
+  
+    return response.json();
+  };
+  
