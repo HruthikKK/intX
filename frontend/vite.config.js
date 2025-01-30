@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-                target: 'http://localhost:8000', // Replace with your backend port
+                target: 'https://intx.onrender.com/', // Replace with your backend port
                 changeOrigin: true,
                 secure: false,
         },
