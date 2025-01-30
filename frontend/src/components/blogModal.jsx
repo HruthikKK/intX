@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { apiClient, apiFetch } from "./Api.jsx";
+import { apiClient, apiFetch } from "../pages/Api.jsx";
 
 const BlogModal = ({ show, initialData, setShow, iscreate, setBlogs }) => {
   const navigate = useNavigate();

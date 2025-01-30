@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signoutSuccess } from '../app/features/userSlice';
-import { apiClient, apiFetch } from "./Api.jsx";
+import { apiClient, apiFetch } from "../pages/Api.jsx";
 
 function Header() {
 
