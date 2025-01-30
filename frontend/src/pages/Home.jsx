@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import apiClient from "./Api.jsx";
 
 function Home() {
   // Sample data for blogs and contributors
@@ -18,11 +19,11 @@ useEffect(() => {
   const fetchData = async () => {
     try {
       // Fetch data for blogs, contributors, top blogs, and company tags using axios
-      const blogResponse = await axios.get('https://intx.onrender.com/api/blog/all');
+      const blogResponse = await apiClient.get('/api/blog/all');
       const blogsData = blogResponse.data;
       // console.log(blogsData);
 
-      const contributorsResponse = await axios.get('https://intx.onrender.com/api/home/topContributors ');
+      const contributorsResponse = await apiClient.get('/api/home/topContributors ');
       const contributorsData = contributorsResponse.data;
       // console.log(contributorsData);
       
