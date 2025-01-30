@@ -33,7 +33,7 @@ function SignIn() {
     }
 
     try {
-      const response = await apiFetch("https://intx.onrender.com/api/auth/signin", {
+      const response = await fetch("https://intx.onrender.com/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
