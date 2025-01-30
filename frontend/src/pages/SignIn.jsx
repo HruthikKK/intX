@@ -13,6 +13,7 @@ function SignIn() {
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const API_URL = import.meta.env.VITE_API_URL || "https://intx.onrender.com"; 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +33,7 @@ function SignIn() {
     }
 
     try {
-      const response = await apiFetch("/api/auth/signin", {
+      const response = await apiFetch("https://intx.onrender.com/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
