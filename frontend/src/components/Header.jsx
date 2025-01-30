@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signoutSuccess } from '../app/features/userSlice';
+import { apiClient, apiFetch } from "./Api.jsx";
 
 function Header() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const API_URL = import.meta.env.VITE_API_URL || "https://intx.onrender.com";
 
   const handleSignout = async () => {
     try {
-      const res = await fetch('/api/user/signout', {
+      const res = await fetch(`${API_URL}/api/user/signout`, {
         method: 'POST',
       });
       const data = await res.json();

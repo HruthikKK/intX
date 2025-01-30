@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { apiClient, apiFetch } from "./Api.jsx";
 
 const BlogModal = ({ show, initialData, setShow, iscreate, setBlogs }) => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const blogId = initialData?._id;
+  const API_URL = import.meta.env.VITE_API_URL || "https://intx.onrender.com";
 
   const [formData, setFormData] = useState({
     title: '',
@@ -54,7 +56,7 @@ const BlogModal = ({ show, initialData, setShow, iscreate, setBlogs }) => {
       let response = null;
 
       if (iscreate) {
-        response = await fetch('/api/blog/create', {
+        response = await fetch(`${API_URL}/api/blog/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -62,7 +64,7 @@ const BlogModal = ({ show, initialData, setShow, iscreate, setBlogs }) => {
           body: JSON.stringify({ title, description, company, author }), // Sending formData as JSON
         });
       } else {
-        response = await fetch(`/api/blog/update/${blogId}`, {
+        response = await fetch(`${API_URL}/api/blog/update/${blogId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

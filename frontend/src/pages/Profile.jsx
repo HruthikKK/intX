@@ -36,7 +36,7 @@ function Profile() {
     if (!confirmation) return;
 
     try {
-      const response = await apiFetch(`/api/user/${userId}`, {
+      const response = await fetch(`${API_URL}/api/user/${userId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ function Profile() {
     }
 
     try {
-      const response = await apiFetch("/api/user/update", {
+      const response = await fetch(`${API_URL}/api/user/update`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -195,7 +195,7 @@ function Profile() {
       setBlogs((prevBlogs) => prevBlogs.filter(blog => blog._id !== blogId));
   
       // Optionally, make an API call to delete the blog from the server:
-      apiFetch(`/api/blog/delete/${blogId}`, {
+      fetch(`${API_URL}/api/blog/delete/${blogId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
