@@ -22,7 +22,7 @@ useEffect(() => {
       const blogsData = blogResponse.data;
       // console.log(blogsData);
 
-      const contributorsResponse = await axios.get('/api/home/topContributors ');
+      const contributorsResponse = await axios.get('https://intx.onrender.com/api/home/topContributors ');
       const contributorsData = contributorsResponse.data;
       // console.log(contributorsData);
       
